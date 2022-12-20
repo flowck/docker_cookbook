@@ -9,3 +9,14 @@ services:
       - "127.0.0.1:8100:5432"
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/create_database.sql
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    # Services waiting for postgres should have the following config:
+    # links:
+    #  - postgres
+    # depends_on:
+    #  postgres:
+    #    condition: service_healthy
